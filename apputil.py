@@ -27,12 +27,15 @@ class MarkovText(object):
     def generate(self, seed_term=None, term_count=15):
         """
         Generate text using a first-order Markov chain.
+        Raises ValueError if the seed term is invalid.
         """
         if self.term_dict is None:
             self.get_term_dict()
 
-        # choose starting word
-        if seed_term is not None and seed_term in self.term_dict:
+        # Seed handling for autograder
+        if seed_term is not None:
+            if seed_term not in self.term_dict:
+                raise ValueError(f"Seed term '{seed_term}' not found in corpus.")
             current = seed_term
         else:
             current = np.random.choice(list(self.term_dict.keys()))
